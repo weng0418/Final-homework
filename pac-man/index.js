@@ -92,7 +92,6 @@
 				context.textAlign = 'right';
 				context.textBaseline = 'bottom';
 				context.fillStyle = '#AAA';
-				context.fillText('© passer-by.com',this.x,this.y);
 			}
 		});
 		//事件绑定
