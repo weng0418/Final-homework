@@ -1,6 +1,6 @@
-//主程序,业务逻辑
+//主程式
 (function(){
-	var _DATA = [		//地图数据
+	var _DATA = [		//地圖範圍
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -33,7 +33,7 @@
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	],
-	_GOODS = {			//能量豆
+	_GOODS = {			//豆子
 		'1,3':1,
 		'26,3':1,
 		'1,23':1,
@@ -41,12 +41,12 @@
 	},
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
-	_COLOR = ['#F00','#F93','#0CF','#F9C'],//红,橙,
+	_COLOR = ['#F00','#F93','#0CF','#F9C'],//紅,橘,
 	_LIFE = 3,
 	_SCORE = 0;		//得分
 
 	var game = new Game('canvas');
-	//启动页
+	//啟動頁面
 	(function(){
 		var stage = game.createStage();
 		//logo
@@ -71,7 +71,7 @@
 				context.fill();
 			}
 		});
-		//游戏名
+		//遊戲名稱
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.6,
@@ -83,7 +83,6 @@
 				context.fillText('Pac-Man',this.x,this.y);
 			}
 		});
-		//版权信息
 		stage.createItem({
 			x:game.width-12,
 			y:game.height-5,
@@ -104,18 +103,18 @@
 			}
 		});
 	})();
-	//游戏主程序
+	//遊戲主程序
 	(function(){
 		var stage,map,beans,player,times;
 		stage = game.createStage({
 			update:function(){
 				var stage = this;
-				if(stage.status==1){								//场景正常运行
+				if(stage.status==1){								//場景運行
 					items.forEach(function(item){
 						if(map&&!map.get(item.coord.x,item.coord.y)&&!map.get(player.coord.x,player.coord.y)){
 							var dx = item.x-player.x;
 							var dy = item.y-player.y;
-							if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
+							if(dx*dx+dy*dy<750&&item.status!=4){		//物體檢測
 								if(item.status==3){
 									item.status = 4;
 									_SCORE += 10;
@@ -126,10 +125,10 @@
 							}
 						}
 					});
-					if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入结束画面
+					if(JSON.stringify(beans.data).indexOf(0)<0){	//當沒有物品的時候，進入遊戲畫面
 						game.nextStage();
 					}
-				}else if(stage.status==3){		//场景临时状态
+				}else if(stage.status==3){		//場景臨時狀態
 					if(!stage.timeout){
 						_LIFE--;
 						if(_LIFE){
@@ -213,7 +212,7 @@
 				}
 			}
 		});
-		//物品地图
+		//物品地圖
 		beans = stage.createMap({
 			x:60,
 			y:10,
@@ -255,7 +254,7 @@
 				context.fillText(_SCORE,this.x+12,this.y);
 			}
 		});
-		//状态文字
+		//狀態文字
 		stage.createItem({
 			x:690,
 			y:320,
@@ -307,13 +306,13 @@
 					if(this.status==3&&!this.timeout){
 						this.status = 1;
 					}
-					if(!this.coord.offset){			//到达坐标中心时计算
+					if(!this.coord.offset){			//到達坐標中心時計算
 						if(this.status==1){
-							if(!this.timeout){		//定时器
+							if(!this.timeout){		//定時器
 								new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
 								var id = this._id;
 								items.forEach(function(item){
-									if(item._id!=id&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
+									if(item._id!=id&&item.status==1){	//NPC將其它所有還處於正常狀態的NPC當成一堵牆
 										new_map[item.coord.y][item.coord.x]=1;
 									}
 								});
@@ -356,7 +355,7 @@
 								this.status = 1;
 							}
 						}
-						//是否转变方向
+						//是否轉變方向
 						if(this.vector.change){
 							this.coord.x = this.vector.x;
 							this.coord.y = this.vector.y;
@@ -458,9 +457,9 @@
 					if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
 						_SCORE++;
 						beans.set(this.coord.x,this.coord.y,1);
-						if(_GOODS[this.coord.x+','+this.coord.y]){	//吃到能量豆
+						if(_GOODS[this.coord.x+','+this.coord.y]){	//吃到豆子
 							items.forEach(function(item){
-								if(item.status==1||item.status==3){	//如果NPC为正常状态，则置为临时状态
+								if(item.status==1||item.status==3){	//如果NPC為正常狀態，則置為臨時狀態
 									item.timeout = 450;
 									item.status = 3;
 								}
@@ -474,7 +473,7 @@
 			draw:function(context){
 				context.fillStyle = '#FFE600';
 				context.beginPath();
-				if(stage.status!=3){	//玩家正常状态
+				if(stage.status!=3){	//玩家正常狀態
 					if(this.times%2){
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
 					}else{
@@ -493,8 +492,8 @@
 		//事件绑定
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
-				case 13: //回车
-				case 32: //空格
+				case 13: //確認鍵
+				case 32: //空白鍵
 				this.status = this.status==2?1:2;
 				break;
 				case 39: //右
@@ -512,10 +511,10 @@
 			}
 		});
 	})();
-	//结束画面
+	//結束畫面
 	(function(){
 		var stage = game.createStage();
-		//游戏结束
+		//遊戲結束
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.35,
@@ -527,7 +526,7 @@
 				context.fillText('GAME OVER',this.x,this.y);
 			}
 		});
-		//记分
+		//計分
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.5,
@@ -542,8 +541,8 @@
 		//事件绑定
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
-				case 13: //回车
-				case 32: //空格
+				case 13: //確認鍵
+				case 32: //空白鍵
 				_SCORE = 0;
 				_LIFE = 3;
 				var st = game.setStage(1);
